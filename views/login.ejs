@@ -43,6 +43,14 @@
               }
               %>
               <form action="./<%=action%>">
+                <%
+                if(action == 'signup') {
+                %>
+                  <input type="text" placeholder="prenom" name="firstName">
+                  <input type="text" placeholder="nom" name="lastName">
+                <%
+                }
+                %>
                 <input type="text" placeholder="email" name="email">
                 <input type="password" placeholder="password" name="password">
                 <input type="submit" name="valider">
