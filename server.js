@@ -35,7 +35,11 @@ app.get('/', function (req, res) {
 
   request("https://api.themoviedb.org/3/discover/movie?api_key=1ca44169216245030924859d77648835&language=fr-FR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1", function(error, response, body) {
     body = JSON.parse(body);
-    res.render('home', {movies: body.results, page: 'home'});
+ 
+    MovieModel.find( { user_id: req.session.user_id} , function (err, moviesLike) {
+      res.render('home', {movies: body.results, mymovies: moviesLike,  page: 'home'});
+    })
+   
   });
 });
 
@@ -57,7 +61,7 @@ app.get('/review', function (req, res) {
         });
         movie.save(function (error, movie) {
           MovieModel.find( { user_id: req.session.user_id} , function (err, movies) {
-            res.render('home', {movies: movies, page: 'review'});
+            res.render('home', {movies: movies, mymovies: [],  page: 'review'});
           }) 
         });
       });

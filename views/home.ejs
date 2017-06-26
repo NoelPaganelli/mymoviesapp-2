@@ -59,7 +59,16 @@
                   <div class="movie-title">
                     <a href="./single"><%=movies[i].title%></a>
                     <%
-                    if(page == 'home') {
+                    var isLiked = false; 
+                    for(var j=0; j<mymovies.length; j++) {
+                      if (movies[i].title == mymovies[j].title) {
+                        isLiked = true;
+                    %>
+                      <i style="color: pink;" class="fa fa-heart" aria-hidden="true"></i>
+                    <%
+                      }                      
+                    }                    
+                    if(isLiked == false && page == 'home') {
                     %>
                       <a href="./review?id=<%=movies[i].id%>"> <i class="fa fa-heart-o" aria-hidden="true"></i></a> 
                     <%
