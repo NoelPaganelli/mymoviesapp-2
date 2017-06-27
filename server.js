@@ -1,7 +1,12 @@
-var express = require('express');
-var request = require('request');
-var session = require("express-session");
-var mongoose= require('mongoose');
+var express   = require('express');
+var request   = require('request');
+var session   = require("express-session");
+var mongoose  = require('mongoose');
+var Mailchimp = require('mailchimp-api-v3')
+var mailchimp = new Mailchimp('720a3dbe2a0d3d7e9c4a0accd2593887-us14');
+var Trello    = require("node-trello");
+var t         = new Trello("568526dad1bd8f7874fadea91a432cdd", "9c9e7a6ae080cbae8e968160491ddbd78a8c56d30be1e4ea7f954ad53f0e98be");
+
 mongoose.connect('mongodb://noel:toto75@ds129342.mlab.com:29342/moviesapp' , function(err) {
   
 });
@@ -75,6 +80,32 @@ app.get('/review', function (req, res) {
 app.get('/contact', function (req, res) {
   res.render('contact');
 });
+
+app.get('/contact-save', function (req, res) {
+
+  mailchimp.post('/lists/70545c35c6/members', 
+  {
+    email_address : req.query.email,
+    status: 'subscribed',
+    merge_fields: {
+      FNAME: req.query.firstName,
+      LNAME: req.query.lastName
+    }
+  })
+  
+  t.post("/1/cards", 
+  { 
+   idList : "5952666113615c1425206f66",
+   name : req.query.firstName+' '+req.query.lastName+' '+req.query.email
+  }, function(err, data) {
+    console.log(err);
+  });
+ 
+
+  res.redirect('/');
+});
+
+
 
 app.get('/login', function (req, res) {
   
